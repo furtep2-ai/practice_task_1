@@ -1,0 +1,10 @@
+/venv
+.env
+/__pycache__
+.env.test
+.my_database.db
+/.vscode
+/.pytest_cache
+.alembic.ini
+.pytest.ini
+.init_data.py
