@@ -32,8 +32,8 @@ def override_session():
     async def override_get_db():
         async with TestingSessionLocal() as session:
             yield session
-
-    app.dependency_overrides[get_db] = override_get_db
+    #mock бд
+    app.dependency_overrides[get_db] = override_get_db #в этой строке мы берем функцию get_db и заменяем на override_get_db подмена зависимостей
     yield
     app.dependency_overrides.clear()
 

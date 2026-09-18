@@ -44,8 +44,9 @@ async def get_slots(db: AsyncSession = Depends(get_db), current_user: str = Depe
         })
     return {"slots": slots_list}
 
+#owner_id берется прямиком из токена
 @app.post("/bookings/{slot_id}/book", status_code = status.HTTP_201_CREATED)
-async def book_slot(request: BookingRequest, db: AsyncSession = Depends(get_db),current_user: str = Depends(get_current_user)):
+async def book_slot(request: BookingRequest, db: AsyncSession = Depends(get_db), current_user: str = Depends(get_current_user)):
         slot_id = request.slot_id
         query = await db.execute(select(Slot).where(Slot.id == slot_id))
         result = query.scalar_one_or_none()
@@ -64,7 +65,7 @@ async def book_slot(request: BookingRequest, db: AsyncSession = Depends(get_db),
         
             await db.commit()
             await db.refresh(booking)
-
+        #2 и более пользователи могут одновременно забронировать что и приведет к ошибке UNIQUIE защита на уровне бд и не требует лишних затрат в коде
         except IntegrityError:
             await db.rollback()
             raise HTTPException(status_code = 409, detail = "Slot already booked")
