@@ -1,6 +1,8 @@
-Если заголовок отсутствует или токен неверный → `401 msg = 'Invalid token' ` для всех роутов.
+Сервис бронирования
 
 Список методов API
+
+Если заголовок отсутствует или токен неверный → `401 msg = 'Invalid token' ` для всех роутов.
 
 1. GET('Slots') - Выдача всех слотов.
 
@@ -42,3 +44,53 @@
     {"id": b.id, "slot_id": b.slot_id, "owner_id": b.owner_id}
     for b in bookings
 ]}
+
+Цикл работы API бронирования:
+
+1. Создание брони
+
+ЗАПРОС:
+    POST /bookings/S1/book
+    X-Demo-Token: Demo-user-1
+    Content-Type: application/json
+    {"slot_id": "S1"}
+
+ОТВЕТ:
+    201 Created
+    {"id": 1, "slot_id": "S1"}
+
+2. Конфликт при повторной попытке
+
+ПОВТОРНЫЙ ЗАПРОС:
+    POST /bookings/S1/book
+    X-Demo-Token: Demo-user-1
+    Content-Type: application/json
+    {"slot_id": "S1"}
+
+ОТВЕТ:
+    409 detail = "Slot already booked"
+
+3. Отмена брони
+
+ЗАПРОС:
+    DELETE /bookings/1
+    X-Demo-Token: Demo-user-1
+
+ОТВЕТ:
+    204 No Content
+
+4. Новое создание после отмены
+
+ЗАПРОС:
+    POST /bookings/S1/book
+    X-Demo-Token: Demo-user-2
+    Content-Type: application/json
+    {"slot_id": "S1"}
+
+ОТВЕТ:
+    201 Created
+    {"id": 2, "slot_id": "S1"}
+
+
+
+

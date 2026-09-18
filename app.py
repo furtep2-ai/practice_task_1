@@ -21,6 +21,7 @@ async def get_db():
     async with AsyncSessionLocal() as session:
         yield session
 
+#Проверка токена и выдача owner_id
 async def get_current_user(x_demo_token: str = Header()):
     if x_demo_token not in TOKENS:
         raise HTTPException(status_code=401, detail="Invalid token")
@@ -65,7 +66,8 @@ async def book_slot(request: BookingRequest, db: AsyncSession = Depends(get_db),
         
             await db.commit()
             await db.refresh(booking)
-        #2 и более пользователи могут одновременно забронировать что и приведет к ошибке UNIQUIE защита на уровне бд и не требует лишних затрат в коде
+        #2 и более пользователи могут одновременно забронировать слот что и приведет к ошибке.
+        # UNIQUIE защита на уровне бд и не требует лишних затрат в коде
         except IntegrityError:
             await db.rollback()
             raise HTTPException(status_code = 409, detail = "Slot already booked")
