@@ -4,5 +4,5 @@ sqlalchemy==2.0.52
 pydantic==2.13.5
 uvicorn==0.52.4
 aiosqlite==0.22.1
-httpx==0.28.1
+httpx2==2.13.0
 
