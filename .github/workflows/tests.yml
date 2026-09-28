@@ -26,5 +26,4 @@ on:
 
       - name: Run tests
         run: |
-          cd project
           pytest -v
