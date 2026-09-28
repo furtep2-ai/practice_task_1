@@ -17,7 +17,7 @@ on:
       - name: Установка пайтона
         uses: actions/setup-python@v4
         with:
-          python-version: '3.14.7'
+          python-version: '3.11'
 
       - name: Зависимости
         run: |
